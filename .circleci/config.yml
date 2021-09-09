@@ -65,6 +65,8 @@ jobs:
             chmod +x kubectl
             mv ./kubectl /usr/bin
             kubectl version --client
+            sudo containerd &
+            sleep 5
             sudo dockerd --iptables=false &
             sleep 15
             docker -v
