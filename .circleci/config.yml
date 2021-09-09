@@ -44,7 +44,7 @@ jobs:
 
   deploy:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: docker:20.10.8-git
     steps:
       # Checkout code from git
       - checkout
@@ -54,7 +54,7 @@ jobs:
             echo $PATH
             apk add --update openrc
             apk add --update curl
-            apk add --update docker
+            apk add --no-cache python3 py3-pip
             pip3 install --upgrade pip
             pip3 install awscli
             aws --version
@@ -62,7 +62,6 @@ jobs:
             chmod +x kubectl
             mv ./kubectl /usr/bin
             kubectl version --client
-            service docker start
 #            yum install -y util-linux
 #            yum install -y tar gzip sudo
 #            curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-20.10.5.tgz
