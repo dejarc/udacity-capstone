@@ -44,7 +44,7 @@ jobs:
 
   deploy:
     docker:
-      - image: docker:20.10.8-git
+      - image: docker:20.10.8-dind
     steps:
       # Checkout code from git
       - checkout
@@ -62,7 +62,7 @@ jobs:
             chmod +x kubectl
             mv ./kubectl /usr/bin
             kubectl version --client
-            sudo dockerd --iptables=false &
+            sudo dockerd &
             sleep 15
             docker -v
 #            yum install -y util-linux
