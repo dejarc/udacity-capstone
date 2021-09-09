@@ -44,7 +44,7 @@ jobs:
 
   deploy:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.7.3-stretch
     steps:
       # Checkout code from git
       - checkout
@@ -53,21 +53,20 @@ jobs:
       - run:
           name: Install dependencies required by docker build and deploy
           command: |
-            echo $PATH
-            yum install -y util-linux
-            yum install -y sudo
+            apk add --update docker-cli
+            apk add --update openrc
+            apk add --update curl
+            apk add --no-cache python3 py3-pip sudo
+            pip3 install --upgrade pip
+            pip3 install awscli
+            aws --version
             curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
             sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-            kubectl version --client
-#            apk add --update openrc
-#            apk add --update curl
-#            apk add --no-cache python3 py3-pip sudo
-#            pip3 install --upgrade pip
-#            pip3 install awscli
-#            aws --version
+#            echo $PATH
+#            yum install -y util-linux docker-ce-cli
+#            yum install -y sudo
 #            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-#            chmod +x kubectl
-#            mv ./kubectl /usr/bin
+#            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 #            kubectl version --client
 #            sudo containerd &
 #            sleep 5
