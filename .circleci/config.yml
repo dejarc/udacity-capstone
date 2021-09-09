@@ -56,7 +56,6 @@ jobs:
             curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-20.10.5.tgz
             tar xzvf docker-20.10.5.tgz
             cp docker/* /usr/bin
-            dockerd &
             docker -v
             curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
             sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
