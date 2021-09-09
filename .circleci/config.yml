@@ -54,7 +54,6 @@ jobs:
             apk add --update openrc
             apk add --update curl
             apk add --update docker
-#            service docker start
             service docker status
             pip3 install --upgrade pip
             pip3 install awscli
