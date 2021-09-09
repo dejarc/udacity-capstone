@@ -62,30 +62,7 @@ jobs:
             aws --version
             curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
             sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-#            echo $PATH
-#            yum install -y util-linux docker-ce-cli
-#            yum install -y sudo
-#            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-#            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-#            kubectl version --client
-#            sudo containerd &
-#            sleep 5
-#            sudo dockerd --iptables=false &
-#            sleep 15
-#            docker -v
 
-#            yum install -y util-linux
-#            yum install -y tar gzip sudo
-#            curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-20.10.5.tgz
-#            tar xzvf docker-20.10.5.tgz
-#            cp docker/* /usr/bin
-#            sudo containerd &
-#            sudo dockerd --iptables=false &
-#            docker -v
-#            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-#            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-#            kubectl version --client
-#            aws --version
       - run:
           name: push to ecr registry
           command: |
@@ -102,5 +79,5 @@ jobs:
 workflows:
   default:
     jobs:
-#      - build
+      - build
       - deploy
