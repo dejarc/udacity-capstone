@@ -51,6 +51,7 @@ jobs:
       - run:
           name: Install dependencies required by docker build and deploy
           command: |
+            apk add --update openrc
             apk add --update curl
             apk add --update docker
             service docker start
