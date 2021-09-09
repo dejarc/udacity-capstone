@@ -44,7 +44,7 @@ jobs:
 
   deploy:
     docker:
-      - image: python:3.7.3-stretch
+      - image: python:3.7-alpine3.11
     steps:
       # Checkout code from git
       - checkout
