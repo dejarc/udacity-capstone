@@ -2,7 +2,7 @@
 #
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
@@ -41,3 +41,33 @@ jobs:
           command: |
             . venv/bin/activate
             make lint
+
+  deploy:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      # Checkout code from git
+      - checkout
+      - run:
+          name: Install dependencies required by docker build and deploy
+          command: |
+            docker -v
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+            kubectl version --client
+            aws --version
+      - run:
+          name: push to ecr registry
+          command: |
+            aws eks update-kubeconfig --region us-west-2 --name EKS
+            kubectl get deployment
+            aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 977473413593.dkr.ecr.us-west-2.amazonaws.com
+            docker build -t udacity-capstone .
+            docker tag udacity-capstone:latest 977473413593.dkr.ecr.us-west-2.amazonaws.com/udacity-capstone:latest
+            docker push 977473413593.dkr.ecr.us-west-2.amazonaws.com/udacity-capstone:latest
+
+workflows:
+  default:
+    jobs:
+#      - build
+      - deploy
