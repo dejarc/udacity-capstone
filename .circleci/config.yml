@@ -58,7 +58,7 @@ jobs:
             pip3 install --upgrade pip
             pip3 install awscli
             aws --version
-            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
             chmod +x kubectl
             mv ./kubectl /usr/bin
             kubectl version --client
