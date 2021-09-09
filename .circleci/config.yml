@@ -43,33 +43,39 @@ jobs:
             make lint
 
   deploy:
-    environment:
-      DOCKER_HOST: tcp://docker:2375
-      DOCKER_TLS_VERIFY: 0
     docker:
-      - image: docker:20-dind
+      - image: amazon/aws-cli
     steps:
       # Checkout code from git
       - checkout
+      - setup_remote_docker:
+          version: 20.10.5
+          docker_layer_caching: true
       - run:
           name: Install dependencies required by docker build and deploy
           command: |
             echo $PATH
-            apk add --update openrc
-            apk add --update curl
-            apk add --no-cache python3 py3-pip sudo
-            pip3 install --upgrade pip
-            pip3 install awscli
-            aws --version
+            yum install -y util-linux
+            yum install -y sudo
             curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-            chmod +x kubectl
-            mv ./kubectl /usr/bin
+            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
             kubectl version --client
-            sudo containerd &
-            sleep 5
-            sudo dockerd --iptables=false &
-            sleep 15
-            docker -v
+#            apk add --update openrc
+#            apk add --update curl
+#            apk add --no-cache python3 py3-pip sudo
+#            pip3 install --upgrade pip
+#            pip3 install awscli
+#            aws --version
+#            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+#            chmod +x kubectl
+#            mv ./kubectl /usr/bin
+#            kubectl version --client
+#            sudo containerd &
+#            sleep 5
+#            sudo dockerd --iptables=false &
+#            sleep 15
+#            docker -v
+
 #            yum install -y util-linux
 #            yum install -y tar gzip sudo
 #            curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-20.10.5.tgz
