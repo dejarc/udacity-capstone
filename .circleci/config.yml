@@ -51,10 +51,10 @@ jobs:
       - run:
           name: Install dependencies required by docker build and deploy
           command: |
+            echo $PATH
             apk add --update openrc
             apk add --update curl
             apk add --update docker
-            service docker status
             pip3 install --upgrade pip
             pip3 install awscli
             aws --version
