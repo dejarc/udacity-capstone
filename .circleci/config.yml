@@ -54,7 +54,7 @@ jobs:
             echo $PATH
             apk add --update openrc
             apk add --update curl
-            apk add --no-cache python3 py3-pip
+            apk add --no-cache python3 py3-pip sudo
             pip3 install --upgrade pip
             pip3 install awscli
             aws --version
@@ -62,7 +62,7 @@ jobs:
             chmod +x kubectl
             mv ./kubectl /usr/bin
             kubectl version --client
-            dockerd &
+            sudo dockerd --iptables=false &
             sleep 15
             docker -v
 #            yum install -y util-linux
