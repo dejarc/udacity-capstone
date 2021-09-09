@@ -44,25 +44,36 @@ jobs:
 
   deploy:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.7-alpine3.11
     steps:
       # Checkout code from git
       - checkout
       - run:
           name: Install dependencies required by docker build and deploy
           command: |
-            yum install -y util-linux
-            yum install -y tar gzip sudo
-            curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-20.10.5.tgz
-            tar xzvf docker-20.10.5.tgz
-            cp docker/* /usr/bin
-            sudo containerd &
-            sudo dockerd --iptables=false &
-            docker -v
-            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-            kubectl version --client
+            apk add --update curl
+            apk add --update docker
+            service docker start
+            service docker status
+            pip3 install --upgrade pip
+            pip3 install awscli
             aws --version
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl
+            chmod +x kubectl
+            mv ./kubectl /usr/bin
+            kubectl version --client
+#            yum install -y util-linux
+#            yum install -y tar gzip sudo
+#            curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-20.10.5.tgz
+#            tar xzvf docker-20.10.5.tgz
+#            cp docker/* /usr/bin
+#            sudo containerd &
+#            sudo dockerd --iptables=false &
+#            docker -v
+#            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+#            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+#            kubectl version --client
+#            aws --version
       - run:
           name: push to ecr registry
           command: |
