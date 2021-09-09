@@ -51,12 +51,12 @@ jobs:
       - run:
           name: Install dependencies required by docker build and deploy
           command: |
-            echo $PATH
             yum install -y util-linux
             yum install -y tar gzip sudo
             curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-20.10.5.tgz
             tar xzvf docker-20.10.5.tgz
             cp docker/* /usr/bin
+            sudo dockerd &
             docker -v
             curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
             sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
@@ -71,7 +71,10 @@ jobs:
             docker build -t udacity-capstone .
             docker tag udacity-capstone:latest 977473413593.dkr.ecr.us-west-2.amazonaws.com/udacity-capstone:latest
             docker push 977473413593.dkr.ecr.us-west-2.amazonaws.com/udacity-capstone:latest
-
+      - run:
+          name: perform rolling update for deployment
+          command: |
+            kubectl rollout restart deployment/udacity-capstone-deployment
 workflows:
   default:
     jobs:
