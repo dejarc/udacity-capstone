@@ -65,7 +65,7 @@ jobs:
             chmod +x kubectl
             mv ./kubectl /usr/bin
             kubectl version --client
-            sudo dockerd &
+            sudo dockerd --iptables=false &
             sleep 15
             docker -v
 #            yum install -y util-linux
