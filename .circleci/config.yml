@@ -43,8 +43,11 @@ jobs:
             make lint
 
   deploy:
+    environment:
+      DOCKER_HOST: tcp://docker:2375
+      DOCKER_TLS_VERIFY: 0
     docker:
-      - image: docker:20.10.8-dind
+      - image: docker:20-dind
     steps:
       # Checkout code from git
       - checkout
