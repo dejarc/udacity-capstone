@@ -62,12 +62,14 @@ jobs:
             aws --version
             curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
             sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-
+      - run:
+          name: Create cloudformation eks infrastructure
+          command: |
+            aws cloudformation deploy --template-file cloudformation.yml --stack-name udacity-capstone-prod --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
       - run:
           name: push to ecr registry
           command: |
             aws eks update-kubeconfig --region us-west-2 --name EKS
-            kubectl get deployment
             aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 977473413593.dkr.ecr.us-west-2.amazonaws.com
             docker build -t udacity-capstone .
             docker tag udacity-capstone:latest 977473413593.dkr.ecr.us-west-2.amazonaws.com/udacity-capstone:latest
@@ -75,9 +77,18 @@ jobs:
       - run:
           name: perform rolling update for deployment
           command: |
-            kubectl rollout restart deployment/udacity-capstone-deployment
+            if kubectl get deployment | grep "udacity-capstone-deployment"
+            then
+              echo "restarting deployment"
+              kubectl rollout restart deployment/udacity-capstone-deployment
+            else
+              echo "creating deployment"
+              kubectl create deployment udacity-capstone-deployment --image=977473413593.dkr.ecr.us-west-2.amazonaws.com/udacity-capstone:latest
+              kubectl expose deployment/udacity-capstone-deployment --type=LoadBalancer --port 80
+            fi
 workflows:
   default:
     jobs:
       - build
-      - deploy
+      - deploy:
+          requires: [build]
