@@ -176,7 +176,7 @@ Resources:
               - 'sts:AssumeRole'
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
-  myCluster:
+  MyCluster:
     DependsOn:
       - RoleForEKSCluster
       - ControlPlaneSecurityGroup
@@ -193,7 +193,7 @@ Resources:
           - Ref: PublicSubnet01
           - Ref: PublicSubnet02
 
-  nodeInstanceRole:
+  NodeInstanceRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -211,7 +211,7 @@ Resources:
         - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
       Path: /
 
-  eksNodeGroup:
+  EksNodeGroup:
     Type: AWS::EKS::Nodegroup
     Properties:
       ClusterName: !Ref EKSClusterName

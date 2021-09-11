@@ -7,7 +7,7 @@ log = logger(__name__)
 
 @app.route('/')
 def hello():
-    return f'Hello World, my name is Chris DeJarlais'
+    return "Hello World, my name is Chris DeJarlais"
 
 if __name__ == "__main__": # pragma: no cover
     log.info("START Flask")
