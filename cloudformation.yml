@@ -216,7 +216,7 @@ Resources:
     Properties:
       ClusterName: !Ref EKSClusterName
       NodeRole:
-        "Fn::GetAtt": [ "nodeInstanceRole", "Arn" ]
+        "Fn::GetAtt": [ "NodeInstanceRole", "Arn" ]
       AmiType: AL2_x86_64
       InstanceTypes:
         - !Ref EKSWorkerNodeInstanceType
@@ -232,7 +232,7 @@ Resources:
       Subnets:
         - !Ref PublicSubnet01
         - !Ref PublicSubnet02
-    DependsOn: [ myCluster, nodeInstanceRole ]
+    DependsOn: [ MyCluster, NodeInstanceRole ]
 Outputs:
   SubnetIds:
     Description: Subnets IDs in the VPC
