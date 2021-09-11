@@ -63,10 +63,6 @@ jobs:
             curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
             sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
       - run:
-          name: Create cloudformation eks infrastructure
-          command: |
-            aws cloudformation deploy --template-file cloudformation.yml --stack-name udacity-capstone-prod --no-fail-on-empty-changeset --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
-      - run:
           name: push to ecr registry
           command: |
             aws eks update-kubeconfig --region us-west-2 --name EKS
